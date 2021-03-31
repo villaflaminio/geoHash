@@ -19,11 +19,11 @@ public class Main {
         // org.openjdk.jmh.Main.main(args);
         List<String> db = new ArrayList<>();
 
-        for (int i = 0; i < 5000; i++) {
+        for (int i = 0; i < 50000; i++) {
             db.add(RandomGeoHashes.create().toBinaryString());
         }
 
-        List<GeoHash> structuresInRange = StructureDistance.isStructureInRange(39.8648866576058, 116.378465869303, 320000,db);
+        List<GeoHash> structuresInRange = StructureDistance.isStructureInRange(39.8648866576058, 116.378465869303, 500000,db);
 
         for (GeoHash sout : structuresInRange)
             System.out.println(sout);
