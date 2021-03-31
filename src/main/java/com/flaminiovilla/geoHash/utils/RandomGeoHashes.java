@@ -2,10 +2,8 @@ package com.flaminiovilla.geoHash.utils;
 
 
 import com.flaminiovilla.geoHash.model.GeoHash;
+import com.flaminiovilla.geoHash.model.GeoPoint;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Random;
 
 public class RandomGeoHashes {
@@ -22,7 +20,9 @@ public class RandomGeoHashes {
 	public static GeoHash create() {
 		return GeoHash.withBitPrecision(randomLatitude(), randomLongitude(), randomPrecision());
 	}
-
+	public static GeoPoint randomGeoPoint() {
+		return new GeoPoint(randomLatitude(), randomLongitude());
+	}
 	private static double randomLatitude() {
 		return (rand.nextDouble() - 0.5) * 180;
 	}

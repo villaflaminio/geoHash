@@ -82,43 +82,6 @@ public final class GeoHash implements Comparable<GeoHash>, Serializable {
 		return geohash.recombineLatLonBitsToHash(latitudeBits, longitudeBits);
 	}
 
-	/**
-	 * build a new {@link GeoHash} from a base32-encoded {@link String}.<br>
-	 * This will also set up the hashes bounding box and other values, so it can
-	 * also be used with functions like within().
-	 */
-	public static GeoHash fromGeohashString(String geohash) {
-		double[] latitudeRange = { -90.0, 90.0 };
-		double[] longitudeRange = { -180.0, 180.0 };
-
-		boolean isEvenBit = true;
-		GeoHash hash = new GeoHash();
-
-		for (int i = 0; i < geohash.length(); i++) {
-			char c = geohash.charAt(i);
-			int cd;
-			if (c >= decodeArray.length || (cd = decodeArray[c]) < 0) {
-				throw new IllegalArgumentException("Invalid character character '" + c + "' in geohash '"+geohash+"'!");
-			}
-			for (int j = 0; j < BASE32_BITS; j++) {
-				int mask = BITS[j];
-				if (isEvenBit) {
-					divideRangeDecode(hash, longitudeRange, (cd & mask) != 0);
-				} else {
-					divideRangeDecode(hash, latitudeRange, (cd & mask) != 0);
-				}
-				isEvenBit = !isEvenBit;
-			}
-		}
-
-		double latitude = (latitudeRange[0] + latitudeRange[1]) / 2;
-		double longitude = (longitudeRange[0] + longitudeRange[1]) / 2;
-
-		hash.point = new GeoPoint(latitude, longitude);
-		setBoundingBox(hash, latitudeRange, longitudeRange);
-		hash.bits <<= (MAX_BIT_PRECISION - hash.significantBits);
-		return hash;
-	}
 
 	public static GeoHash fromLongValue(long hashVal, int significantBits) {
 		double[] latitudeRange = { -90.0, 90.0 };
@@ -149,16 +112,6 @@ public final class GeoHash implements Comparable<GeoHash>, Serializable {
 		return hash;
 	}
 
-	/**
-	 * This method uses the given number of characters as the desired precision
-	 * value. The hash can only be 64bits long, thus a maximum precision of 12
-	 * characters can be achieved.
-	 */
-	public static String geoHashStringWithCharacterPrecision(double latitude, double longitude, int numberOfCharacters) {
-		GeoHash hash = withCharacterPrecision(latitude, longitude, numberOfCharacters);
-		return hash.toBase32();
-	}
-
 	private GeoHash(double latitude, double longitude, int desiredPrecision) {
 		point = new GeoPoint(latitude, longitude);
 		desiredPrecision = Math.min(desiredPrecision, MAX_BIT_PRECISION);
@@ -184,59 +137,13 @@ public final class GeoHash implements Comparable<GeoHash>, Serializable {
 		hash.boundingBox = new BoundingBox(latitudeRange[0], latitudeRange[1], longitudeRange[0], longitudeRange[1]);
 	}
 
-	public GeoHash next(int step) {
-		return fromOrd(ord() + step, significantBits);
-	}
-
-	public GeoHash next() {
-		return next(1);
-	}
-
-	public GeoHash prev() {
-		return next(-1);
-	}
 
 	public long ord() {
 		int insignificantBits = MAX_BIT_PRECISION - significantBits;
 		return bits >>> insignificantBits;
 	}
 
-	/**
-	 * Returns the number of characters that represent this hash.
-	 * 
-	 * @throws IllegalStateException
-	 *             when the hash cannot be encoded in base32, i.e. when the
-	 *             precision is not a multiple of 5.
-	 */
-	public int getCharacterPrecision() {
-		if (significantBits % 5 != 0) {
-			throw new IllegalStateException(
-					"precision of GeoHash is not divisble by 5: " + this);
-		}
-		return significantBits / 5;
-	}
 
-	public static GeoHash fromOrd(long ord, int significantBits) {
-		int insignificantBits = MAX_BIT_PRECISION - significantBits;
-		return fromLongValue(ord << insignificantBits, significantBits);
-	}
-
-	/**
-	 * Counts the number of geohashes contained between the two (ie how many
-	 * times next() is called to increment from one to two) This value depends
-	 * on the number of significant bits.
-	 * 
-	 * @param one
-	 * @param two
-	 * @return number of steps
-	 */
-	public static long stepsBetween(GeoHash one, GeoHash two) {
-		if (one.significantBits() != two.significantBits()) {
-			throw new IllegalArgumentException(
-					"It is only valid to compare the number of steps between two hashes if they have the same number of significant bits");
-		}
-		return two.ord() - one.ord();
-	}
 
 	private void divideRangeEncode(double value, double[] range) {
 		double mid = (range[0] + range[1]) / 2;
