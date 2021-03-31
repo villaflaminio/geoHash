@@ -10,6 +10,11 @@ import java.util.List;
 
 public class StructureDistance {
 
+    public static String getHash(double latitude , double longitude){
+        GeoHash point = GeoHash.withBitPrecision(latitude, longitude, 32);
+        return point.toBinaryString();
+    }
+
     public static List<GeoHash> isStructureInRange(double latitude , double longitude , int distance , List<String> structuresString){
         List<GeoHash> structures = new ArrayList<>();
         List<GeoHash> structuresInRange = new ArrayList<>();
