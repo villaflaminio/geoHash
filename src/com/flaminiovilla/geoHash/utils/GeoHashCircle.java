@@ -20,23 +20,23 @@ import java.util.List;
  * represents a radius search around a specific point via geohashes.
  * Approximates the circle with a square!
  */
-public class GeoHashCircleQuery implements Serializable {
+public class GeoHashCircle implements Serializable {
 	private static final long serialVersionUID = 1263295371663796291L;
 	private double radius;
-	private GeoHashBoundingBoxQuery query;
+	private GeoHashBoundingBox query;
 
 	private GeoPoint center;
 
 	/**
-	 * create a {@link GeoHashCircleQuery} with the given center point and a radius in meters.
+	 * create a {@link GeoHashCircle} with the given center point and a radius in meters.
 	 */
-	public GeoHashCircleQuery(GeoPoint center, double radius) {
+	public GeoHashCircle(GeoPoint center, double radius) {
 		this.radius = radius;
 		this.center = center;
 		GeoPoint northEastCorner = VincentyGeodesy.moveInDirection(VincentyGeodesy.moveInDirection(center, 0, radius), 90, radius);
 		GeoPoint southWestCorner = VincentyGeodesy.moveInDirection(VincentyGeodesy.moveInDirection(center, 180, radius), 270, radius);
 		BoundingBox bbox = new BoundingBox(southWestCorner, northEastCorner);
-		query = new GeoHashBoundingBoxQuery(bbox);
+		query = new GeoHashBoundingBox(bbox);
 	}
 
 	public boolean contains(GeoHash hash) {

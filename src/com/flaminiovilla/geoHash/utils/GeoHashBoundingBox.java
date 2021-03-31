@@ -20,14 +20,14 @@ import java.util.List;
  * either 1,2 or 4 such hashes, depending on the position of the bounding box
  * on the geohash grid.
  */
-public class GeoHashBoundingBoxQuery implements Serializable {
+public class GeoHashBoundingBox implements Serializable {
 	private static final long serialVersionUID = 9223256928940522683L;
 	/* there can be up to 8 hashes since it can be 2 separate queries */
 	private List<GeoHash> searchHashes = new ArrayList<>(8);
 	/* the combined bounding box of those hashes. */
 	private BoundingBox boundingBox;
 
-	public GeoHashBoundingBoxQuery(BoundingBox bbox) {
+	public GeoHashBoundingBox(BoundingBox bbox) {
 		if (!bbox.intersects180Meridian()) {
 			// In this case one query is enough
 			generateSearchHashes(bbox);
