@@ -16,24 +16,17 @@ import java.util.concurrent.TimeUnit;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-       // org.openjdk.jmh.Main.main(args);
+        // org.openjdk.jmh.Main.main(args);
+        List<String> db = new ArrayList<>();
 
-        List<GeoHash> db = new ArrayList<>();
-       // GeoPoint center = new GeoPoint(39.86391280373075, 116.37356590048701);
-        GeoPoint center =  RandomGeoHashes.randomGeoPoint();
-
-        GeoHashCircle circle = new GeoHashCircle(center, 10000);
-
-        for(int i=0 ;  i<500 ; i++){
-            db.add(RandomGeoHashes.create());
+        for (int i = 0; i < 5000; i++) {
+            db.add(RandomGeoHashes.create().toBinaryString());
         }
 
-        for (GeoHash point : db){
-            if (circle.contains(point))
-                System.out.println("circle " + circle.contains(point)+ " contains ");
+        List<GeoHash> structuresInRange = StructureDistance.isStructureInRange(39.8648866576058, 116.378465869303, 320000,db);
 
-        }
-
+        for (GeoHash sout : structuresInRange)
+            System.out.println(sout);
     /*
         GeoHash testHash1 = GeoHash.withBitPrecision(39.8648866576058, 116.378465869303, 32);
         // the distance between center and test1 is about 430 meters
