@@ -6,9 +6,7 @@
  * in the LICENSE file. If you have not, see
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-package com.flaminiovilla.geoHash.utils;
-
-import com.flaminiovilla.geoHash.model.GeoPoint;
+package com.flaminiovilla.geoHash.model;
 
 import java.io.Serializable;
 
@@ -73,14 +71,6 @@ public class BoundingBox implements Serializable {
 		return new GeoPoint(northLatitude, westLongitude);
 	}
 
-	/**
-	 * Returns the NorthEastCorner of this BoundingBox as a new Point.
-	 *
-	 * @return
-	 */
-	public GeoPoint getNorthEastCorner() {
-		return new GeoPoint(northLatitude, eastLongitude);
-	}
 
 	/**
 	 * Returns the SouthEastCorner of this BoundingBox as a new Point.
@@ -91,14 +81,6 @@ public class BoundingBox implements Serializable {
 		return new GeoPoint(southLatitude, eastLongitude);
 	}
 
-	/**
-	 * Returns the SouthWestCorner of this BoundingBox as a new Point.
-	 *
-	 * @return
-	 */
-	public GeoPoint getSouthWestCorner() {
-		return new GeoPoint(southLatitude, westLongitude);
-	}
 
 	/**
 	 * Returns the size of the bounding box in degrees of latitude. The value returned will always be positive.

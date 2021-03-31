@@ -1,5 +1,7 @@
 
-package com.flaminiovilla.geoHash.utils;
+package com.flaminiovilla.geoHash.model;
+
+import com.flaminiovilla.geoHash.model.BoundingBox;
 
 public class GeoHashSizeTable {
 	private static final int NUM_BITS = 64;

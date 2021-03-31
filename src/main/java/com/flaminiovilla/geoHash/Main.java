@@ -22,7 +22,7 @@ public class Main {
        // GeoPoint center = new GeoPoint(39.86391280373075, 116.37356590048701);
         GeoPoint center =  RandomGeoHashes.randomGeoPoint();
 
-        GeoHashCircle circle = new GeoHashCircle(center, 1000000);
+        GeoHashCircle circle = new GeoHashCircle(center, 10000);
 
         for(int i=0 ;  i<500 ; i++){
             db.add(RandomGeoHashes.create());

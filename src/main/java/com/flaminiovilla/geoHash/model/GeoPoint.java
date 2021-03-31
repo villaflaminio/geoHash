@@ -19,10 +19,6 @@ public class GeoPoint implements Serializable {
 		}
 	}
 
-	public GeoPoint(GeoPoint other) {
-		this(other.latitude, other.longitude);
-	}
-
 	public double getLatitude() {
 		return latitude;
 	}

@@ -10,6 +10,7 @@ package com.flaminiovilla.geoHash.utils;
 
 
 
+import com.flaminiovilla.geoHash.model.BoundingBox;
 import com.flaminiovilla.geoHash.model.GeoHash;
 import com.flaminiovilla.geoHash.model.GeoPoint;
 
@@ -43,14 +44,6 @@ public class GeoHashCircle implements Serializable {
 		return query.contains(hash);
 	}
 
-	public String getWktBox() {
-		return query.getWktBox();
-	}
-
-	public List<GeoHash> getSearchHashes() {
-		return query.getSearchHashes();
-	}
-
 	public String toString() {
 		return "Cicle Query [center=" + center + ", radius=" + getRadiusString() + "]";
 	}
@@ -63,7 +56,4 @@ public class GeoHashCircle implements Serializable {
 		}
 	}
 
-	public boolean contains(GeoPoint point) {
-		return query.contains(point);
-	}
 }
