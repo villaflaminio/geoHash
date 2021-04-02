@@ -18,7 +18,7 @@ public class StructureDistance {
     public static double getDistance(GeoPoint a, GeoPoint b){
         return VincentyGeodesy.distanceInMeters(a,b);
     }
-    public static List<GeoHash> isStructureInRange(double latitude , double longitude , int distance , List<String> structuresString){
+    public static List<GeoHash> isStructureInRange(double latitude , double longitude , double distance , List<String> structuresString){
         List<GeoHash> structures = new ArrayList<>();
         List<GeoHash> structuresInRange = new ArrayList<>();
 

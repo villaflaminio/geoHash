@@ -23,7 +23,7 @@ public class Main {
             db.add(RandomGeoHashes.create().toBinaryString());
         }
 
-        List<GeoHash> structuresInRange = StructureDistance.isStructureInRange(39.8648866576058, 116.378465869303, 500000,db);
+        List<GeoHash> structuresInRange = StructureDistance.isStructureInRange(39.8648866576058, 116.378465869303, 5000000d,db);
 
         for (GeoHash sout : structuresInRange)
             System.out.println(sout);
@@ -43,7 +43,6 @@ public class Main {
 
         System.out.println("circle " + circle.contains(testHash1)+ " contains ");
     */
-
     }
 
     @Benchmark
