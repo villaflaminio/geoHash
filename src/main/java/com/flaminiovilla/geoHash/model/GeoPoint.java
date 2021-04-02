@@ -22,7 +22,6 @@ public class GeoPoint implements Serializable {
 	public double getLatitude() {
 		return latitude;
 	}
-
 	public double getLongitude() {
 		return longitude;
 	}

@@ -1,11 +1,4 @@
-/*
- * Copyright 2010, Silvio Heuberger @ IFS www.ifs.hsr.ch
- *
- * This code is release under the Apache License 2.0.
- * You should have received a copy of the license
- * in the LICENSE file. If you have not, see
- * http://www.apache.org/licenses/LICENSE-2.0
- */
+
 package com.flaminiovilla.geoHash.utils;
 
 
@@ -13,6 +6,12 @@ import com.flaminiovilla.geoHash.model.GeoPoint;
 
 /**
  * Ecapsulates Vincety's geodesy algorithm .
+ * orrelati utilizzati in geodesia per calcolare la distanza tra due punti sulla superficie
+ * di uno sferoide
+ * Si basano sul presupposto che la figura della Terra sia uno sferoide oblato ,
+ * e quindi sono più accurati dei metodi che assumono una Terra sferica ,
+ * come la distanza del cerchio maggiore .
+ * Le formule di Vincenty - https://it.qaz.wiki/wiki/Vincenty's_formulae
  */
 public class VincentyGeodesy {
 	static final double equatorRadius = 6378137, poleRadius = 6356752.3142, f = 1 / 298.257223563;

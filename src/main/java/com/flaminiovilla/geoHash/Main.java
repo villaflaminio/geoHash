@@ -16,39 +16,19 @@ import java.util.concurrent.TimeUnit;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        // org.openjdk.jmh.Main.main(args);
-        List<String> db = new ArrayList<>();
+        Long startTime = System.currentTimeMillis();
+
+        org.openjdk.jmh.Main.main(args);
+        List<GeoPoint> db = new ArrayList<>();
 
         for (int i = 0; i < 50000; i++) {
-            db.add(RandomGeoHashes.create().toBinaryString());
+            db.add(RandomGeoHashes.randomGeoPoint());
         }
 
-        List<GeoHash> structuresInRange = StructureDistance.isStructureInRange(39.8648866576058, 116.378465869303, 5000000d,db);
+        List<GeoPoint> structuresInRange = StructureDistance.isStructureInRange(39.8648866576058, 116.378465869303, 50,db);
+        Long endtime = System.currentTimeMillis();
+        System.out.println("Tempo impiegato :" + (endtime - startTime));
 
-        for (GeoHash sout : structuresInRange)
-            System.out.println(sout);
-    /*
-        GeoHash testHash1 = GeoHash.withBitPrecision(39.8648866576058, 116.378465869303, 32);
-        // the distance between center and test1 is about 430 meters
-        GeoPoint test1 = new GeoPoint(39.8648866576058, 116.378465869303);
-        // the distance between center and test2 is about 510 meters
-        GeoPoint test2 = new GeoPoint(39.8664787092599, 116.378552856158);
-        // the distance between center and test2 is about 600 meters
-        GeoPoint test3 = new GeoPoint(39.8786787092599, 116.378552856158);
-
-        System.out.println("circle " + circle.contains(test1)+ " contains ");
-        System.out.println("circle " + circle.contains(test2)+ " contains ");
-        System.out.println("circle " + circle.contains(test3)+ " contains ");
-        System.out.println(testHash1);
-
-        System.out.println("circle " + circle.contains(testHash1)+ " contains ");
-    */
     }
 
-    @Benchmark
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
-    @BenchmarkMode(Mode.AverageTime)
-    public void init() {
-        // Do nothing
-    }
 }

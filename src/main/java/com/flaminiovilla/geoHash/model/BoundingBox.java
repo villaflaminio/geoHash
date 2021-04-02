@@ -1,11 +1,4 @@
-/*
- * Copyright 2010, Silvio Heuberger @ IFS www.ifs.hsr.ch
- *
- * This code is release under the Apache License 2.0.
- * You should have received a copy of the license
- * in the LICENSE file. If you have not, see
- * http://www.apache.org/licenses/LICENSE-2.0
- */
+
 package com.flaminiovilla.geoHash.model;
 
 import java.io.Serializable;
@@ -18,7 +11,7 @@ public class BoundingBox implements Serializable {
 	private double eastLongitude;
 	private boolean intersects180Meridian;
 
-	/**
+	/** ------------
 	 * create a bounding box defined by two coordinates
 	 */
 	public BoundingBox(GeoPoint southWestCorner, GeoPoint northEastCorner) {
@@ -81,32 +74,6 @@ public class BoundingBox implements Serializable {
 		return new GeoPoint(southLatitude, eastLongitude);
 	}
 
-
-	/**
-	 * Returns the size of the bounding box in degrees of latitude. The value returned will always be positive.
-	 *
-	 * @return
-	 */
-	public double getLatitudeSize() {
-		return northLatitude - southLatitude;
-	}
-
-	/**
-	 * Returns the size of the bounding box in degrees of longitude. The value returned will always be positive.
-	 *
-	 * @return
-	 */
-	public double getLongitudeSize() {
-		if (eastLongitude == 180.0 && westLongitude == -180.0)
-			return 360.0;
-		double size = (eastLongitude - westLongitude) % 360;
-
-		// Remainder fix for earlier java versions
-		if (size < 0)
-			size += 360.0;
-		return size;
-	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -139,21 +106,6 @@ public class BoundingBox implements Serializable {
 		return containsLatitude(point.getLatitude()) && containsLongitude(point.getLongitude());
 	}
 
-	public boolean intersects(BoundingBox other) {
-		// Check latitude first cause it's the same for all cases
-		if (other.southLatitude > northLatitude || other.northLatitude < southLatitude) {
-			return false;
-		} else {
-			if (!intersects180Meridian && !other.intersects180Meridian) {
-				return !(other.eastLongitude < westLongitude || other.westLongitude > eastLongitude);
-			} else if (intersects180Meridian && !other.intersects180Meridian) {
-				return !(eastLongitude < other.westLongitude && westLongitude > other.eastLongitude);
-			} else if (!intersects180Meridian && other.intersects180Meridian) {
-				return !(westLongitude > other.eastLongitude && eastLongitude < other.westLongitude);
-			} else
-				return true;
-		}
-	}
 
 	@Override
 	public String toString() {
@@ -171,66 +123,6 @@ public class BoundingBox implements Serializable {
 		return new GeoPoint(centerLatitude, centerLongitude);
 	}
 
-	/**
-	 * Expands this bounding box to include the provided bounding box. The expansion is done in the direction with the minimal distance. If both distances are the same it'll expand
-	 * in east direction. It will not cross poles, but it will cross the 180-Meridian, if thats the shortest distance.<br>
-	 * If a precise specification of the northEast and southWest points is needed, please create a new bounding box where you can specify the points separately.
-	 *
-	 * @param other
-	 */
-	public void expandToInclude(BoundingBox other) {
-
-		// Expand Latitude
-		if (other.southLatitude < southLatitude) {
-			southLatitude = other.southLatitude;
-		}
-		if (other.northLatitude > northLatitude) {
-			northLatitude = other.northLatitude;
-		}
-
-		// Expand Longitude
-		// At first check whether the two boxes contain each other or not
-		boolean thisContainsOther = containsLongitude(other.eastLongitude) && containsLongitude(other.westLongitude);
-		boolean otherContainsThis = other.containsLongitude(eastLongitude) && other.containsLongitude(westLongitude);
-
-		// The new box needs to span the whole globe
-		if (thisContainsOther && otherContainsThis) {
-			eastLongitude = 180.0;
-			westLongitude = -180.0;
-			intersects180Meridian = false;
-			return;
-		}
-		// Already done in this case
-		if (thisContainsOther)
-			return;
-		// Expand to match the bigger box
-		if (otherContainsThis) {
-			eastLongitude = other.eastLongitude;
-			westLongitude = other.westLongitude;
-			intersects180Meridian = eastLongitude < westLongitude;
-			return;
-		}
-
-		// If this is not the case compute the distance between the endpoints in east direction
-		double distanceEastToOtherEast = (other.eastLongitude - eastLongitude) % 360;
-		double distanceOtherWestToWest = (westLongitude - other.westLongitude) % 360;
-
-		// Fix for lower java versions, since the remainder-operator (%) changed in one version, idk which one
-		if (distanceEastToOtherEast < 0)
-			distanceEastToOtherEast += 360;
-		if (distanceOtherWestToWest < 0)
-			distanceOtherWestToWest += 360;
-
-		// The minimal distance needs to be extended
-		if (distanceEastToOtherEast <= distanceOtherWestToWest) {
-			eastLongitude = other.eastLongitude;
-		} else {
-			westLongitude = other.westLongitude;
-		}
-
-		intersects180Meridian = eastLongitude < westLongitude;
-	}
-
 	private boolean containsLatitude(double latitude) {
 		return latitude >= southLatitude && latitude <= northLatitude;
 	}
@@ -243,23 +135,4 @@ public class BoundingBox implements Serializable {
 		}
 	}
 
-	public double getEastLongitude() {
-		return eastLongitude;
-	}
-
-	public double getWestLongitude() {
-		return westLongitude;
-	}
-
-	public double getNorthLatitude() {
-		return northLatitude;
-	}
-
-	public double getSouthLatitude() {
-		return southLatitude;
-	}
-
-	public boolean intersects180Meridian() {
-		return intersects180Meridian;
-	}
 }

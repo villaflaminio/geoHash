@@ -1,6 +1,5 @@
 package com.flaminiovilla.geoHash.utils;
 
-
 import com.flaminiovilla.geoHash.model.GeoHash;
 import com.flaminiovilla.geoHash.model.GeoPoint;
 

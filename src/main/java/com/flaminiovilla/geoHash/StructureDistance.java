@@ -1,13 +1,15 @@
 package com.flaminiovilla.geoHash;
 
+;
+
 import com.flaminiovilla.geoHash.model.GeoHash;
 import com.flaminiovilla.geoHash.model.GeoPoint;
 import com.flaminiovilla.geoHash.utils.GeoHashCircle;
-import com.flaminiovilla.geoHash.utils.RandomGeoHashes;
 import com.flaminiovilla.geoHash.utils.VincentyGeodesy;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class StructureDistance {
 
@@ -18,23 +20,17 @@ public class StructureDistance {
     public static double getDistance(GeoPoint a, GeoPoint b){
         return VincentyGeodesy.distanceInMeters(a,b);
     }
-    public static List<GeoHash> isStructureInRange(double latitude , double longitude , double distance , List<String> structuresString){
-        List<GeoHash> structures = new ArrayList<>();
-        List<GeoHash> structuresInRange = new ArrayList<>();
-
-       for (String s : structuresString){
-           structures.add(GeoHash.fromBinaryString(s));
-
-       }
+    public static List<GeoPoint> isStructureInRange(double latitude , double longitude , double distance , List<GeoPoint> structures){
+        List<GeoPoint> structuresInRange = new ArrayList<>();
 
         GeoPoint center = new GeoPoint(latitude,longitude);
-        GeoHashCircle circle = new GeoHashCircle(center, distance);
+        GeoHashCircle circle = new GeoHashCircle(center, distance*1000);
         System.out.println("circle" + circle);
 
-        for(GeoHash struct : structures){
+        for(GeoPoint struct : structures){
             if(circle.contains(struct)) {
                 structuresInRange.add(struct);
-                System.out.println( "distanza di " + getDistance(struct.getOriginatingPoint(),center) / 1000 + "km" + " contiene" + struct );
+                System.out.println("distanza di " + StructureDistance.getDistance(struct, center) / 1000 + "km");
             }
         }
 
